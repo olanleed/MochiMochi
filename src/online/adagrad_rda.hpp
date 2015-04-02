@@ -26,10 +26,6 @@ public :
 
   virtual ~ADAGRAD_RDA() { }
 
-  double sigmoid(const double x) const {
-    return 1.0 / (1.0 + std::exp(-x));
-  }
-
   double calculate_margin(const Eigen::VectorXd& x) const {
     return _w.dot(x);
   }
