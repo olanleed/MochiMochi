@@ -48,7 +48,7 @@ public :
     return alpha * PHI / (std::sqrt(u) + v * alpha * PHI);
   }
 
-  void fit(const Eigen::VectorXd& x, const int label) {
+  void update(const Eigen::VectorXd& x, const int label) {
     const double v = x.transpose() * _sigma * x;
     const auto m = label * (_mu.dot(x));
     const auto n = v + 1.0 / 2.0 * C;

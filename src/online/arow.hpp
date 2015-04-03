@@ -35,7 +35,7 @@ public :
     return x.transpose() * _sigma * x;
   }
 
-  void fit(const Eigen::VectorXd& feature, const int label) {
+  void update(const Eigen::VectorXd& feature, const int label) {
     const auto margin = calculate_margin(feature);
     const auto confidence = calculate_confidence(feature);
     const auto beta = 1.0 / (confidence + R);

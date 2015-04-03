@@ -60,7 +60,7 @@ int main(const int ac, const char* const * const av) {
   std::cout << "training..." << std::endl;
   while(std::getline(train_data, line)) {
     std::pair< int, Eigen::VectorXd > data = parse(dim, line);
-    arow.fit(data.second, data.first);
+    arow.update(data.second, data.first);
   }
 
   int collect = 0;
