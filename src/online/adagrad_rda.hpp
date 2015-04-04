@@ -36,12 +36,12 @@ public :
 
   void update(const Eigen::VectorXd& feature, const int label) {
     if (suffer_loss(feature, label) <= 0.0) { return ; }
+
     _timestep++;
     for (std::size_t i = 0; i < kDim; i++) {
-      const double g = -label * feature[i];
-
-      _g[i] += g;
-      _h[i] += g * g;
+      const auto gradiant = -label * feature[i];
+      _g[i] += gradiant;
+      _h[i] += gradiant * gradiant;
 
       const int sign = _g[i] >= 0 ? 1 : -1;
       const double eta = kEta / std::sqrt(_h[i]);
@@ -57,7 +57,7 @@ public :
    }
 
   int predict(const Eigen::VectorXd& x) const {
-    return calculate_margin(x) >= 0.0 ? 1 : -1;
+    return calculate_margin(x) > 0.0 ? 1 : -1;
   }
 
 };
