@@ -21,8 +21,9 @@ private :
   int _timestep;
 
 public :
-  ADAM(const int dim) : kDim(dim) {
-    _timestep = 0.0;
+  ADAM(const int dim)
+    : kDim(dim),
+      _timestep(0) {
     _w = _m = _v = Eigen::VectorXd::Zero(kDim);
   }
 

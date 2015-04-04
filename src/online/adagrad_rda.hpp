@@ -17,10 +17,13 @@ private :
   Eigen::VectorXd _w;
   Eigen::VectorXd _g;
   Eigen::VectorXd _h;
-  int _timestep = 0;
+  int _timestep;
 
 public :
-  ADAGRAD_RDA(const int dim, const double lambda) : kDim(dim), kLambda(lambda) {
+  ADAGRAD_RDA(const int dim, const double lambda)
+    : kDim(dim),
+      kLambda(lambda),
+      _timestep(0) {
     _w = _g = _h = Eigen::VectorXd::Zero(kDim);
   }
 
