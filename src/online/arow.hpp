@@ -5,20 +5,20 @@
 
 class AROW {
 private :
-  const int DIM;
-  const double R;
+  const int kDim;
+  const double kR;
 
 private :
   Eigen::MatrixXd _sigma;
   Eigen::VectorXd _mu;
 
 public :
-  AROW(const int dim, const double r) : DIM(dim), R(r) {
+  AROW(const int dim, const double r) : kDim(dim), kR(r) {
     static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
     static_assert(std::numeric_limits<decltype(r)>::max() > 0, "Hyper Parameter Error. (r > 0)");
 
-    _sigma = Eigen::MatrixXd::Identity(DIM, DIM);
-    _mu = Eigen::VectorXd::Zero(DIM);
+    _sigma = Eigen::MatrixXd::Identity(kDim, kDim);
+    _mu = Eigen::VectorXd::Zero(kDim);
   }
 
   virtual ~AROW() { }
@@ -35,10 +35,10 @@ public :
     return x.transpose() * _sigma * x;
   }
 
-  void fit(const Eigen::VectorXd& feature, const int label) {
+  void update(const Eigen::VectorXd& feature, const int label) {
     const auto margin = calculate_margin(feature);
     const auto confidence = calculate_confidence(feature);
-    const auto beta = 1.0 / (confidence + R);
+    const auto beta = 1.0 / (confidence + kR);
     const auto alpha = std::max(0.0, 1.0 - label * feature.transpose() * _mu) * beta;
 
     if (suffer_loss(margin, label) < 1.0) {
@@ -53,4 +53,4 @@ public :
 
 };
 
-#endif //SRC_ONLINE_AROW_HPP_
+#endif //SkRC_ONLINE_AROW_HPP_

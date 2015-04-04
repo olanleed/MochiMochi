@@ -1,4 +1,4 @@
-#include "../../../src/online/arow.hpp"
+#include "../../../src/online/adam.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>
@@ -39,8 +39,7 @@ int main(const int ac, const char* const * const av) {
     ("help", "")
     ("dim", value<int>()->default_value(0), "データの次元数")
     ("train", value<std::string>()->default_value(""), "学習データのファイルパス")
-    ("test", value<std::string>()->default_value(""), "評価データのファイルパス")
-    ("r", value<double>()->default_value(0.5), "ハイパパラメータ(r)");
+    ("test", value<std::string>()->default_value(""), "評価データのファイルパス");
 
   variables_map vm;
   store(parse_command_line(ac, av, description), vm);
@@ -51,16 +50,15 @@ int main(const int ac, const char* const * const av) {
   const auto dim = vm["dim"].as<int>();
   const auto train_path = vm["train"].as<std::string>();
   const auto test_path = vm["test"].as<std::string>();
-  const auto r = vm["r"].as<double>();
 
   std::string line;
   std::ifstream train_data(train_path);
 
-  AROW arow(dim, r);
+  ADAM adam(dim);
   std::cout << "training..." << std::endl;
   while(std::getline(train_data, line)) {
     std::pair< int, Eigen::VectorXd > data = parse(dim, line);
-    arow.update(data.second, data.first);
+    adam.update(data.second, data.first);
   }
 
   int collect = 0;
@@ -69,7 +67,7 @@ int main(const int ac, const char* const * const av) {
   std::cout << "predicting..." << std::endl;
   while(std::getline(test_data, line)) {
     std::pair< int, Eigen::VectorXd > data = parse(dim, line);
-    int pred = arow.predict(data.second);
+    int pred = adam.predict(data.second);
     if(pred == data.first) {
       ++collect;
     }

@@ -1,4 +1,4 @@
-#include "../../../src/online/arow.hpp"
+#include "../../../src/online/adagrad_rda.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>
@@ -40,7 +40,7 @@ int main(const int ac, const char* const * const av) {
     ("dim", value<int>()->default_value(0), "データの次元数")
     ("train", value<std::string>()->default_value(""), "学習データのファイルパス")
     ("test", value<std::string>()->default_value(""), "評価データのファイルパス")
-    ("r", value<double>()->default_value(0.5), "ハイパパラメータ(r)");
+    ("lambda", value<double>()->default_value(0.000001), "ハイパパラメータ(λ)");
 
   variables_map vm;
   store(parse_command_line(ac, av, description), vm);
@@ -51,16 +51,16 @@ int main(const int ac, const char* const * const av) {
   const auto dim = vm["dim"].as<int>();
   const auto train_path = vm["train"].as<std::string>();
   const auto test_path = vm["test"].as<std::string>();
-  const auto r = vm["r"].as<double>();
+  const auto lambda = vm["lambda"].as<double>();
 
   std::string line;
   std::ifstream train_data(train_path);
 
-  AROW arow(dim, r);
+  ADAGRAD_RDA rda(dim, lambda);
   std::cout << "training..." << std::endl;
   while(std::getline(train_data, line)) {
     std::pair< int, Eigen::VectorXd > data = parse(dim, line);
-    arow.update(data.second, data.first);
+    rda.update(data.second, data.first);
   }
 
   int collect = 0;
@@ -69,7 +69,7 @@ int main(const int ac, const char* const * const av) {
   std::cout << "predicting..." << std::endl;
   while(std::getline(test_data, line)) {
     std::pair< int, Eigen::VectorXd > data = parse(dim, line);
-    int pred = arow.predict(data.second);
+    int pred = rda.predict(data.second);
     if(pred == data.first) {
       ++collect;
     }
