@@ -36,10 +36,13 @@ public :
   }
 
   void update(const Eigen::VectorXd& feature, const int label) {
-    if (suffer_loss(feature, label) <= 0.0) { return; }
+
+    if (suffer_loss(feature, label) <= 0.0)
+      return ;
+
     _timestep++;
     const Eigen::VectorXd gradiant = -label * feature;
-    const double beta1_t = kLambda * kBeta1;
+    const double beta1_t = std::pow(kLambda, _timestep - 1) * kBeta1;
     for (std::size_t i = 0; i < kDim; i++) {
       _m[i] = beta1_t * _m[i] + (1.0 - beta1_t) * gradiant[i];
       _v[i] = kBeta2 * _v[i] + (1.0 - kBeta2) * gradiant[i] * gradiant[i];
