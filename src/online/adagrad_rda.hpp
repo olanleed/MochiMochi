@@ -8,10 +8,8 @@
 class ADAGRAD_RDA {
 private :
   const int kDim;
+  const double kEta;
   const double kLambda;
-
-private :
-  const double kEta = 1.0;
 
 private :
   Eigen::VectorXd _w;
@@ -20,8 +18,9 @@ private :
   int _timestep;
 
 public :
-  ADAGRAD_RDA(const int dim, const double lambda)
+  ADAGRAD_RDA(const int dim, const double eta, const double lambda)
     : kDim(dim),
+      kEta(eta),
       kLambda(lambda),
       _timestep(0) {
     _w = _g = _h = Eigen::VectorXd::Zero(kDim);
