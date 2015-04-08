@@ -2,8 +2,8 @@
 #define SRC_ONLINE_ADAGRAD_RDA_HPP_
 
 #include <Eigen/Core>
+#include <cinttypes>
 #include <cmath>
-#include <map>
 
 class ADAGRAD_RDA {
 private :
@@ -15,7 +15,7 @@ private :
   Eigen::VectorXd _w;
   Eigen::VectorXd _g;
   Eigen::VectorXd _h;
-  int _timestep;
+  std::size_t _timestep;
 
 public :
   ADAGRAD_RDA(const int dim, const double eta, const double lambda)
