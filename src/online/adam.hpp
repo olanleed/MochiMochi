@@ -2,6 +2,8 @@
 #define SRC_ONLINE_ADAM_HPP_
 
 #include <Eigen/Core>
+#include <cassert>
+#include <cinttypes>
 
 class ADAM {
 private :
@@ -18,12 +20,15 @@ private :
   Eigen::VectorXd _w;
   Eigen::VectorXd _m;
   Eigen::VectorXd _v;
-  int _timestep;
+  std::size_t _timestep;
 
 public :
   ADAM(const int dim)
     : kDim(dim),
       _timestep(0) {
+
+    assert(dim > 0);
+
     _w = _m = _v = Eigen::VectorXd::Zero(kDim);
   }
 
@@ -54,7 +59,7 @@ public :
   }
 
   int predict(const Eigen::VectorXd& feature) const {
-    return calculate_margin(feature) >= 0.0 ? 1 : -1;
+    return calculate_margin(feature) > 0.0 ? 1 : -1;
   }
 
 };
