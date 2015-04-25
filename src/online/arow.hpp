@@ -1,7 +1,7 @@
 #ifndef SRC_ONLINE_AROW_HPP_
 #define SRC_ONLINE_AROW_HPP_
 
-#include <Eigen/Core>
+#include <Eigen/Dense>
 
 class AROW {
 private :
