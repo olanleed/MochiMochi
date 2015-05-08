@@ -4,10 +4,11 @@ PROJECT(differential_evolution C CXX)
 
 FIND_PACKAGE(Threads REQUIRED)
 
-SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -std=c++11 -lboost_program_options")
+SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -std=c++11")
 SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 SET(CMAKE_BUILD_TYPE Release)
+SET(CMAKE_C_LINK_EXECUTABLE "-lboost_serialization -lboost_program_options")
 
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR} ../../../src/online/")
 ADD_EXECUTABLE(scw scw.cpp)
-TARGET_LINK_LIBRARIES(scw ${CMAKE_THREAD_LIBS_INIT})
+TARGET_LINK_LIBRARIES(scw ${CMAKE_C_LINK_EXECUTABLE})
