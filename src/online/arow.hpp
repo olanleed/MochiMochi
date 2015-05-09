@@ -36,9 +36,9 @@ public :
     return _means.dot(x);
   }
 
-  double calculate_confidence(const Eigen::VectorXd& f) {
+  double calculate_confidence(const Eigen::VectorXd& feature) const {
     auto confidence = 0.0;
-    utility::enumerate(f.data(), f.data() + f.size(), 0,
+    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
                          confidence += _covariances[index] * value * value;
                        });
@@ -47,11 +47,12 @@ public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
     const auto margin = calculate_margin(feature);
+
+    if (suffer_loss(margin, label) >= 1.0) { return false; }
+
     const auto confidence = calculate_confidence(feature);
     const auto beta = 1.0 / (confidence + kR);
     const auto alpha = std::max(0.0, 1.0 - label * margin) * beta;
-
-    if (suffer_loss(margin, label) >= 1.0) { return false; }
 
     utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
