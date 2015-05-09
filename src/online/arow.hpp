@@ -1,7 +1,9 @@
 #ifndef SRC_ONLINE_AROW_HPP_
 #define SRC_ONLINE_AROW_HPP_
 
-#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <cstdbool>
+#include "utility.hpp"
 
 class AROW {
 private :
@@ -9,16 +11,19 @@ private :
   const double kR;
 
 private :
-  Eigen::MatrixXd _sigma;
-  Eigen::VectorXd _mu;
+  Eigen::VectorXd _covariances;
+  Eigen::VectorXd _means;
 
 public :
-  AROW(const int dim, const double r) : kDim(dim), kR(r) {
+  AROW(const int dim, const double r)
+    : kDim(dim),
+      kR(r),
+      _covariances(Eigen::VectorXd::Ones(kDim)),
+      _means(Eigen::VectorXd::Zero(kDim)) {
+
     static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
     static_assert(std::numeric_limits<decltype(r)>::max() > 0, "Hyper Parameter Error. (r > 0)");
 
-    _sigma = Eigen::MatrixXd::Identity(kDim, kDim);
-    _mu = Eigen::VectorXd::Zero(kDim);
   }
 
   virtual ~AROW() { }
@@ -28,23 +33,33 @@ public :
   }
 
   double calculate_margin(const Eigen::VectorXd& x) const {
-    return _mu.dot(x);
+    return _means.dot(x);
   }
 
-  double calculate_confidence(const Eigen::VectorXd& x) const {
-    return x.transpose() * _sigma * x;
+  double calculate_confidence(const Eigen::VectorXd& f) const {
+    auto confidence = 0.0;
+    utility::enumerate(f.data(), f.data() + f.size(), 0,
+                       [&](const int index, const double value) {
+                         confidence += _covariances[index] * value * value;
+                       });
+    return confidence;
   }
 
-  void update(const Eigen::VectorXd& feature, const int label) {
+  bool update(const Eigen::VectorXd& feature, const int label) {
     const auto margin = calculate_margin(feature);
     const auto confidence = calculate_confidence(feature);
     const auto beta = 1.0 / (confidence + kR);
-    const auto alpha = std::max(0.0, 1.0 - label * feature.transpose() * _mu) * beta;
+    const auto alpha = std::max(0.0, 1.0 - label * margin) * beta;
 
-    if (suffer_loss(margin, label) < 1.0) {
-      _mu.noalias() += alpha * _sigma * label * feature;
-      _sigma -= beta * _sigma * feature * feature.transpose() * _sigma;
-    }
+    if (suffer_loss(margin, label) >= 1.0) { return false; }
+
+    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
+                       [&](const int index, const double value) {
+                         const auto v = _covariances[index] * value;
+                         _means[index] += alpha * label * v;
+                         _covariances[index] -= beta * v * v;
+                       });
+    return true;
   }
 
   int predict(Eigen::VectorXd& x) const {
@@ -53,4 +68,4 @@ public :
 
 };
 
-#endif //SkRC_ONLINE_AROW_HPP_
+#endif //SRC_ONLINE_AROW_HPP_
