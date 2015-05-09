@@ -7,7 +7,7 @@
 
 class AROW {
 private :
-  const int kDim;
+  const std::size_t kDim;
   const double kR;
 
 private :
@@ -15,7 +15,7 @@ private :
   Eigen::VectorXd _means;
 
 public :
-  AROW(const int dim, const double r)
+  AROW(const std::size_t dim, const double r)
     : kDim(dim),
       kR(r),
       _covariances(Eigen::VectorXd::Ones(kDim)),
@@ -36,7 +36,7 @@ public :
     return _means.dot(x);
   }
 
-  double calculate_confidence(const Eigen::VectorXd& f) const {
+  double calculate_confidence(const Eigen::VectorXd& f) {
     auto confidence = 0.0;
     utility::enumerate(f.data(), f.data() + f.size(), 0,
                        [&](const int index, const double value) {
