@@ -23,6 +23,8 @@ public :
 
     static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
     static_assert(std::numeric_limits<decltype(r)>::max() > 0, "Hyper Parameter Error. (r > 0)");
+    assert(dim > 0);
+    assert(r > 0);
 
   }
 
