@@ -33,7 +33,9 @@ public :
     static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
     static_assert(std::numeric_limits<decltype(c)>::max() > 0, "Hyper Parameter Error. (c > 0)");
     static_assert(std::numeric_limits<decltype(eta)>::max() > 0, "Hyper Parameter Error. (η > 0)");
-
+    assert(dim > 0);
+    assert(c > 0);
+    assert(eta > 0);
   }
 
   virtual ~SCW() { }
