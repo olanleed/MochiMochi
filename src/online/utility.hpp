@@ -6,13 +6,16 @@
 namespace utility {
   template <typename IteratorT, typename FunctionT>
   FunctionT enumerate(IteratorT begin,
-					  IteratorT end,
-					  typename std::iterator_traits<IteratorT>::difference_type initial,
-					  FunctionT func) {
-	for (; begin != end; ++begin, ++initial)
-	  func(initial, *begin);
-	return func;
+                      IteratorT end,
+                      typename std::iterator_traits<IteratorT>::difference_type initial,
+                      FunctionT func) {
+
+    for (; begin != end; ++begin, ++initial) {
+      func(initial, *begin);
+    }
+
+    return func;
   }
 };
 
-#endif
+#endif //SRC_ONLINE_UTILITY_HPP_
