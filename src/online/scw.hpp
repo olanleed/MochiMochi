@@ -5,11 +5,18 @@
 #include <boost/math/special_functions/erf.hpp>
 #include <cmath>
 #include <cstdbool>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/split_member.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <fstream>
 #include "utility.hpp"
 
 class SCW {
 private :
-  const int kDim;
+  const std::size_t kDim;
   const double kC;
   const double kPhi;
 
@@ -18,12 +25,12 @@ private :
   Eigen::VectorXd _means;
 
 private :
-  inline double cdf(const double x) {
+  inline double cdf(const double x) const {
     return 0.5 * (1.0 + boost::math::erf(x / std::sqrt(2.0)));
   }
 
 public :
-  SCW(const int dim, const double c, const double eta)
+  SCW(const std::size_t dim, const double c, const double eta)
     : kDim(dim),
       kC(c),
       kPhi(cdf(eta)),
@@ -45,13 +52,13 @@ public :
     return std::max(0.0, kPhi * std::sqrt(confidence) - label * _means.dot(x));
   }
 
-  double calculate_alpha(const double m, const double n, const double v, const double ganma) {
+  double calculate_alpha(const double m, const double n, const double v, const double ganma) const {
     const auto numerator = -(2.0 * m * n + kPhi * kPhi * m * v) + ganma;
     const auto denominator = 2.0 * (n * n + n * v * kPhi * kPhi);
     return std::max(0.0, numerator / denominator);
   }
 
-  double calculate_beta(const double alpha, const double v) {
+  double calculate_beta(const double alpha, const double v) const {
     const auto u = std::pow(-alpha * v * kPhi + 4.0 * v , 2.0) / 4.0;
     return alpha * kPhi / (std::sqrt(u) + v * alpha * kPhi);
   }
@@ -87,6 +94,49 @@ public :
 
   int predict(const Eigen::VectorXd& x) {
     return _means.dot(x) < 0.0 ? -1 : 1;
+  }
+
+  void save(const std::string& filename) {
+    std::ofstream ofs(filename);
+    assert(ofs);
+    boost::archive::text_oarchive oa(ofs);
+    oa << *this;
+    ofs.close();
+  }
+
+  void load(const std::string& filename) {
+    std::ifstream ifs(filename);
+    assert(ifs);
+    boost::archive::text_iarchive ia(ifs);
+    ia >> *this;
+    ifs.close();
+  }
+
+private :
+  friend class boost::serialization::access;
+  BOOST_SERIALIZATION_SPLIT_MEMBER();
+  template <class Archive>
+  void save(Archive& ar, const unsigned int version) const {
+    std::vector<double> covariances_vector(_covariances.data(), _covariances.data() + _covariances.size());
+    std::vector<double> means_vector(_means.data(), _means.data() + _means.size());
+    ar & boost::serialization::make_nvp("covariances", covariances_vector);
+    ar & boost::serialization::make_nvp("means", means_vector);
+    ar & boost::serialization::make_nvp("dimension", const_cast<std::size_t&>(kDim));
+    ar & boost::serialization::make_nvp("phi", const_cast<double&>(kPhi));
+    ar & boost::serialization::make_nvp("c", const_cast<double&>(kC));
+  }
+
+  template <class Archive>
+  void load(Archive& ar, const unsigned int version) {
+    std::vector<double> covariances_vector;
+    std::vector<double> means_vector;
+    ar & boost::serialization::make_nvp("covariances", covariances_vector);
+    ar & boost::serialization::make_nvp("means", means_vector);
+    ar & boost::serialization::make_nvp("dimension", const_cast<std::size_t&>(kDim));
+    ar & boost::serialization::make_nvp("phi", const_cast<double&>(kPhi));
+    ar & boost::serialization::make_nvp("c", const_cast<double&>(kC));
+    _covariances = Eigen::Map<Eigen::VectorXd>(&covariances_vector[0], covariances_vector.size());
+    _means = Eigen::Map<Eigen::VectorXd>(&means_vector[0], means_vector.size());
   }
 
 };
