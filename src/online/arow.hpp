@@ -72,7 +72,7 @@ public :
     return true;
   }
 
-  int predict(Eigen::VectorXd& x) const {
+  int predict(const Eigen::VectorXd& x) const {
     return calculate_margin(x) > 0.0 ? 1 : -1;
   }
 
