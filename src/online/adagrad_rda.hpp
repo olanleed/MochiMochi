@@ -54,15 +54,11 @@ public :
                          _g[index] += gradiant;
                          _h[index] += gradiant * gradiant;
 
-                         const int sign = _g[index] >= 0 ? 1 : -1;
-                         const double eta = kEta / std::sqrt(_h[index]);
-                         const double u = std::abs(_g[index]) / _timestep;
+                         const auto sign = _g[index] >= 0 ? 1 : -1;
+                         const auto eta = kEta / std::sqrt(_h[index]);
+                         const auto u = std::abs(_g[index]) / _timestep;
 
-                         if (u <= kLambda) {
-                           _w[index] = 0.0;
-                         } else {
-                           _w[index] = -sign * eta * _timestep * (u - kLambda);
-                         }
+                         _w[index] = (u <= kLambda) ? 0.0 : -sign * eta * _timestep * (u - kLambda);
                        });
 
   }
