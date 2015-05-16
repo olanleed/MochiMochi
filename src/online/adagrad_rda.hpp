@@ -7,7 +7,7 @@
 
 class ADAGRAD_RDA {
 private :
-  const int kDim;
+  const std::size_t kDim;
   const double kEta;
   const double kLambda;
 
@@ -18,7 +18,7 @@ private :
   Eigen::VectorXd _g;
 
 public :
-  ADAGRAD_RDA(const int dim, const double eta, const double lambda)
+  ADAGRAD_RDA(const std::size_t dim, const double eta, const double lambda)
     : kDim(dim),
       kEta(eta),
       kLambda(lambda),
