@@ -12,10 +12,10 @@ private :
   const double kLambda;
 
 private :
-  Eigen::VectorXd _w;
-  Eigen::VectorXd _g;
-  Eigen::VectorXd _h;
   std::size_t _timestep;
+  Eigen::VectorXd _w;
+  Eigen::VectorXd _h;
+  Eigen::VectorXd _g;
 
 public :
   ADAGRAD_RDA(const int dim, const double eta, const double lambda)
@@ -26,7 +26,12 @@ public :
       _w(Eigen::VectorXd::Zero(kDim)),
       _h(Eigen::VectorXd::Zero(kDim)),
       _g(Eigen::VectorXd::Zero(kDim)) {
-
+    static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
+    static_assert(std::numeric_limits<decltype(eta)>::max() > 0, "Hyper Parameter Error. (eta > 0)");
+    static_assert(std::numeric_limits<decltype(lambda)>::max() > 0, "Hyper Parameter Error. (lambda > 0)");
+    assert(dim > 0);
+    assert(eta > 0);
+    assert(lambda > 0);
   }
 
   virtual ~ADAGRAD_RDA() { }
