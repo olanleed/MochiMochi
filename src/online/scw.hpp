@@ -48,22 +48,22 @@ public :
   virtual ~SCW() { }
 
   double suffer_loss(const Eigen::VectorXd& f, const int label) const {
-    const auto confidence = calculate_confidence(f);
+    const auto confidence = compute_confidence(f);
     return std::max(0.0, kPhi * std::sqrt(confidence) - label * _means.dot(f));
   }
 
-  double calculate_alpha(const double m, const double n, const double v, const double ganma) const {
+  double compute_alpha(const double m, const double n, const double v, const double ganma) const {
     const auto numerator = -(2.0 * m * n + kPhi * kPhi * m * v) + ganma;
     const auto denominator = 2.0 * (n * n + n * v * kPhi * kPhi);
     return std::max(0.0, numerator / denominator);
   }
 
-  double calculate_beta(const double alpha, const double v) const {
+  double compute_beta(const double alpha, const double v) const {
     const auto u = std::pow(-alpha * v * kPhi + 4.0 * v , 2.0) / 4.0;
     return alpha * kPhi / (std::sqrt(u) + v * alpha * kPhi);
   }
 
-  double calculate_confidence(const Eigen::VectorXd& f) const {
+  double compute_confidence(const Eigen::VectorXd& f) const {
     auto confidence = 0.0;
     utility::enumerate(f.data(), f.data() + f.size(), 0,
                        [&](const int index, const double value) {
@@ -73,12 +73,12 @@ public :
   }
 
   bool update(const Eigen::VectorXd& feature, const int label) {
-    const auto v = calculate_confidence(feature);
+    const auto v = compute_confidence(feature);
     const auto m = label * _means.dot(feature);
     const auto n = v + 1.0 / 2.0 * kC;
     const auto ganma = kPhi * std::sqrt(kPhi * kPhi * m * m * v * v + 4.0 * n * v * (n + v * kPhi * kPhi));
-    const auto alpha = calculate_alpha(m, n, v, ganma);
-    const auto beta = calculate_beta(alpha, ganma);
+    const auto alpha = compute_alpha(m, n, v, ganma);
+    const auto beta = compute_beta(alpha, ganma);
 
     if (suffer_loss(feature, label) <= 0.0) { return false; }
 

@@ -41,11 +41,11 @@ public :
     return margin * label;
   }
 
-  double calculate_margin(const Eigen::VectorXd& x) const {
+  double compute_margin(const Eigen::VectorXd& x) const {
     return _means.dot(x);
   }
 
-  double calculate_confidence(const Eigen::VectorXd& feature) const {
+  double compute_confidence(const Eigen::VectorXd& feature) const {
     auto confidence = 0.0;
     utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
@@ -55,11 +55,11 @@ public :
   }
 
   bool update(const Eigen::VectorXd& feature, const int label) {
-    const auto margin = calculate_margin(feature);
+    const auto margin = compute_margin(feature);
 
     if (suffer_loss(margin, label) >= 1.0) { return false; }
 
-    const auto confidence = calculate_confidence(feature);
+    const auto confidence = compute_confidence(feature);
     const auto beta = 1.0 / (confidence + kR);
     const auto alpha = std::max(0.0, 1.0 - label * margin) * beta;
 
@@ -73,7 +73,7 @@ public :
   }
 
   int predict(const Eigen::VectorXd& x) const {
-    return calculate_margin(x) > 0.0 ? 1 : -1;
+    return compute_margin(x) > 0.0 ? 1 : -1;
   }
 
   void save(const std::string& filename) {
