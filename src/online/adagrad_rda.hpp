@@ -44,8 +44,8 @@ public :
     return std::max(0.0, 1.0 - y * _w.dot(x));
   }
 
-  void update(const Eigen::VectorXd& feature, const int label) {
-    if (suffer_loss(feature, label) <= 0.0) { return ; }
+  bool update(const Eigen::VectorXd& feature, const int label) {
+    if (suffer_loss(feature, label) <= 0.0) { return false; }
 
     _timestep++;
     utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
@@ -60,6 +60,7 @@ public :
 
                          _w[index] = (u <= kLambda) ? 0.0 : -sign * eta * _timestep * (u - kLambda);
                        });
+    return true;
 
   }
 
