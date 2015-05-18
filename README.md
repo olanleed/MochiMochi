@@ -26,5 +26,5 @@ Exact Soft Confidence-Weighted Learning
 
 http://icml.cc/2012/papers/86.pdfs
 
-### License
+# License
 The MIT License (MIT)
