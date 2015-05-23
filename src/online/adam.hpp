@@ -4,32 +4,27 @@
 #include <Eigen/Core>
 #include <cassert>
 #include <cinttypes>
+#include "utility.hpp"
 
 class ADAM {
 private :
-  const int kDim;
+  const std::size_t kDim;
 
 private :
-  const double kAlpha = 0.001;
-  const double kBeta1 = 0.9;
-  const double kBeta2 = 0.999;
-  const double kEpsilon = 0.00000001;
-  const double kLambda = 0.99999999;
-
-private :
+  std::size_t _timestep;
   Eigen::VectorXd _w;
   Eigen::VectorXd _m;
   Eigen::VectorXd _v;
-  std::size_t _timestep;
 
 public :
-  ADAM(const int dim)
+  ADAM(const std::size_t dim)
     : kDim(dim),
-      _timestep(0) {
+      _timestep(0),
+      _w(Eigen::VectorXd::Zero(kDim)),
+      _m(Eigen::VectorXd::Zero(kDim)),
+      _v(Eigen::VectorXd::Zero(kDim)) {
 
     assert(dim > 0);
-
-    _w = _m = _v = Eigen::VectorXd::Zero(kDim);
   }
 
   double suffer_loss(const Eigen::VectorXd& x, const int y) const {
@@ -40,22 +35,29 @@ public :
     return _w.dot(x);
   }
 
-  void update(const Eigen::VectorXd& feature, const int label) {
+  bool update(const Eigen::VectorXd& feature, const int label) {
+    constexpr auto kAlpha = 0.001;
+    constexpr auto kBeta1 = 0.9;
+    constexpr auto kBeta2 = 0.999;
+    constexpr auto  kEpsilon = 0.00000001;
+    constexpr auto kLambda = 0.99999999;
 
-    if (suffer_loss(feature, label) <= 0.0)
-      return ;
+    if (suffer_loss(feature, label) <= 0.0) { return false; }
 
     const Eigen::VectorXd gradiant = -label * feature;
-    const double beta1_t = std::pow(kLambda, _timestep) * kBeta1;
+    const auto beta1_t = std::pow(kLambda, _timestep) * kBeta1;
 
     _timestep++;
-    for (std::size_t i = 0; i < kDim; i++) {
-      _m[i] = beta1_t * _m[i] + (1.0 - beta1_t) * gradiant[i];
-      _v[i] = kBeta2 * _v[i] + (1.0 - kBeta2) * gradiant[i] * gradiant[i];
-      const double m_t = _m[i] / (1.0 - std::pow(kBeta1, _timestep));
-      const double v_t = _v[i] / (1.0 - std::pow(kBeta2, _timestep));
-      _w[i] -= kAlpha * m_t / (std::sqrt(v_t) + kEpsilon);
-    }
+    utility::enumerate(gradiant.data(), gradiant.data() + gradiant.size(), 0,
+                       [&](const std::size_t index, const double value) {
+                         _m[index] = beta1_t * _m[index] + (1.0 - beta1_t) * value;
+                         _v[index] = kBeta2 * _v[index] + (1.0 - kBeta2) * value * value;
+                         const auto m_t = _m[index] / (1.0 - std::pow(kBeta1, _timestep));
+                         const auto v_t = _v[index] / (1.0 - std::pow(kBeta2, _timestep));
+                         _w[index] -= kAlpha * m_t / (std::sqrt(v_t) + kEpsilon);
+                       });
+
+    return true;
   }
 
   int predict(const Eigen::VectorXd& feature) const {
