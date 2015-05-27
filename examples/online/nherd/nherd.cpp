@@ -40,7 +40,7 @@ int main(const int ac, const char* const * const av) {
     ("dim", value<int>()->default_value(0), "データの次元数")
     ("train", value<std::string>()->default_value(""), "学習データのファイルパス")
     ("test", value<std::string>()->default_value(""), "評価データのファイルパス")
-    ("c", value<double>()->default_value(0.5), "ハイパパラメータ(r)");
+    ("c", value<double>()->default_value(0.5), "ハイパパラメータ(C)");
   //("cov", value<std::string>()->default_value("full"), "Diagonal Covariance");
 
   variables_map vm;
