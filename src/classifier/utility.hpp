@@ -1,5 +1,5 @@
-#ifndef SRC_ONLINE_UTILITY_HPP_
-#define SRC_ONLINE_UTILITY_HPP_
+#ifndef MOCHIMOCHI_UTILITY_HPP_
+#define MOCHIMOCHI_UTILITY_HPP_
 
 #include <vector>
 
@@ -18,4 +18,4 @@ namespace utility {
   }
 };
 
-#endif //SRC_ONLINE_UTILITY_HPP_
+#endif //MOCHIMOCHI_UTILITY_HPP_
