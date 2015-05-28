@@ -1,4 +1,4 @@
-#include "../../../src/online/adagrad_rda.hpp"
+#include "../../../src/classifier/adagrad_rda.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>

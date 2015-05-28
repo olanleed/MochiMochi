@@ -1,4 +1,4 @@
-#include "../../../src/online/adam.hpp"
+#include "../../../src/classifier/adam.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>
