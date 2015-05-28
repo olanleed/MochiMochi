@@ -1,5 +1,5 @@
-#ifndef SRC_ONLINE_ADAGRAD_RDA_HPP_
-#define SRC_ONLINE_ADAGRAD_RDA_HPP_
+#ifndef MOCHIMOCHI_ADAGRAD_RDA_HPP_
+#define MOCHIMOCHI_ADAGRAD_RDA_HPP_
 
 #include <Eigen/Dense>
 #include <cmath>
@@ -36,6 +36,8 @@ public :
 
   virtual ~ADAGRAD_RDA() { }
 
+private :
+
   double calculate_margin(const Eigen::VectorXd& x) const {
     return _w.dot(x);
   }
@@ -43,6 +45,8 @@ public :
   double suffer_loss(const Eigen::VectorXd& x, const int y) const {
     return std::max(0.0, 1.0 - y * _w.dot(x));
   }
+
+public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
     if (suffer_loss(feature, label) <= 0.0) { return false; }
@@ -61,7 +65,6 @@ public :
                          _w[index] = (u <= kLambda) ? 0.0 : -sign * eta * _timestep * (u - kLambda);
                        });
     return true;
-
   }
 
   int predict(const Eigen::VectorXd& x) const {
@@ -70,4 +73,4 @@ public :
 
 };
 
-#endif //SRC_ONLINE_ADAGRAD_RDA_HPP_
+#endif //MOCHIMOCHI_ADAGRAD_RDA_HPP_

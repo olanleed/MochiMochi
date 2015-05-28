@@ -1,5 +1,5 @@
-#ifndef SRC_ONLINE_NHERD_HPP_
-#define SRC_ONLINE_NHERD_HPP_
+#ifndef MOCHIMOCHI_NHERD_HPP_
+#define MOCHIMOCHI_NHERD_HPP_
 
 #include <Eigen/Dense>
 #include <boost/serialization/serialization.hpp>
@@ -29,7 +29,7 @@ public :
   // 1 : Exact covariance
   // 2 : Project covariance
   // 3 : Drop covariance
-  NHERD(const std::size_t dim, const double C, const int diagonal)
+  NHERD(const std::size_t dim, const double C, const int diagonal = 0)
     : kDim(dim),
       kC(C),
       kDiagonal(diagonal),
@@ -44,6 +44,8 @@ public :
   }
 
   virtual ~NHERD() { }
+
+private :
 
   double suffer_loss(const double margin, const int label) const {
     return margin * label;
@@ -93,6 +95,8 @@ public :
       std::abort();
     }
   }
+
+public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
     const auto margin = compute_margin(feature);
@@ -156,4 +160,4 @@ private :
   }
 };
 
-#endif //SRC_ONLINE_NHERD_HPP_
+#endif //MOCHIMOCHI_NHERD_HPP_

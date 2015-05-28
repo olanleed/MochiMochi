@@ -1,4 +1,4 @@
-#include "../../../src/online/arow.hpp"
+#include "../../../src/classifier/arow.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>

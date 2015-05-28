@@ -1,4 +1,4 @@
-#include "../../../src/online/nherd.hpp"
+#include "../../../src/classifier/nherd.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>

@@ -8,6 +8,6 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -std=c++11 -lboost_program_options")
 SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 SET(CMAKE_BUILD_TYPE Release)
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR} ../../../src/online/")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR} ../../../src/classifier/")
 ADD_EXECUTABLE(rda adagrad_rda.cpp)
 TARGET_LINK_LIBRARIES(rda ${CMAKE_THREAD_LIBS_INIT})

@@ -1,4 +1,4 @@
-#include "../../../src/online/scw.hpp"
+#include "../../../src/classifier/scw.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>
