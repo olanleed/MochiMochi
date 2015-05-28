@@ -26,5 +26,13 @@ Exact Soft Confidence-Weighted Learning
 
 http://icml.cc/2012/papers/86.pdfs
 
+### NHERD
+
+Nomal Herd
+
+Learning via Gaussian Herding
+
+http://webee.technion.ac.il/people/koby/publications/gaussian_mob_nips10.pdf
+
 # License
 The MIT License (MIT)
