@@ -1,5 +1,5 @@
-#ifndef SRC_ONLINE_ADAGRAD_RDA_HPP_
-#define SRC_ONLINE_ADAGRAD_RDA_HPP_
+#ifndef MOCHIMOCHI_ADAGRAD_RDA_HPP_
+#define MOCHIMOCHI_ADAGRAD_RDA_HPP_
 
 #include <Eigen/Dense>
 #include <cmath>
@@ -70,4 +70,4 @@ public :
 
 };
 
-#endif //SRC_ONLINE_ADAGRAD_RDA_HPP_
+#endif //MOCHIMOCHI_ADAGRAD_RDA_HPP_

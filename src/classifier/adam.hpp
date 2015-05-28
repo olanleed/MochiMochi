@@ -1,5 +1,5 @@
-#ifndef SRC_ONLINE_ADAM_HPP_
-#define SRC_ONLINE_ADAM_HPP_
+#ifndef MOCHIMOCHI_ADAM_HPP_
+#define MOCHIMOCHI_ADAM_HPP_
 
 #include <Eigen/Core>
 #include <cassert>
@@ -66,4 +66,4 @@ public :
 
 };
 
-#endif //SRC_ONLINE_ADAM_HPP_
+#endif //MOCHIMOCHI_ADAM_HPP_

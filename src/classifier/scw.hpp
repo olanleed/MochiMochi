@@ -1,5 +1,5 @@
-#ifndef SRC_ONLINE_SCW_HPP_
-#define SRC_ONLINE_SCW_HPP_
+#ifndef MOCHIMOCHI_SCW_HPP_
+#define MOCHIMOCHI_SCW_HPP_
 
 #include <Eigen/Core>
 #include <boost/math/special_functions/erf.hpp>
@@ -141,4 +141,4 @@ private :
 
 };
 
-#endif
+#endif //MOCHIMOCHI_SCW_HPP_
