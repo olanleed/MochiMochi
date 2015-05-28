@@ -29,7 +29,7 @@ public :
   // 1 : Exact covariance
   // 2 : Project covariance
   // 3 : Drop covariance
-  NHERD(const std::size_t dim, const double C, const int diagonal)
+  NHERD(const std::size_t dim, const double C, const int diagonal = 0)
     : kDim(dim),
       kC(C),
       kDiagonal(diagonal),
