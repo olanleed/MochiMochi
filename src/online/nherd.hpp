@@ -2,7 +2,6 @@
 #define SRC_ONLINE_NHERD_HPP_
 
 #include <Eigen/Dense>
-#include <cstdbool>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -10,21 +9,30 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
+#include <cstdlib>
+#include <csignal>
 #include "utility.hpp"
 
 class NHERD {
 private :
   const std::size_t kDim;
   const double kC;
+  const int kDiagonal;
 
 private :
   Eigen::VectorXd _covariances;
   Eigen::VectorXd _means;
 
 public :
-  NHERD(const std::size_t dim, const double C)
+  // int diagonal : switching the diagonal covariance
+  // 0 : Full covariance
+  // 1 : Exact covariance
+  // 2 : Project covariance
+  // 3 : Drop covariance
+  NHERD(const std::size_t dim, const double C, const int diagonal)
     : kDim(dim),
       kC(C),
+      kDiagonal(diagonal),
       _covariances(Eigen::VectorXd::Ones(kDim)),
       _means(Eigen::VectorXd::Zero(kDim)) {
 
@@ -32,7 +40,7 @@ public :
     static_assert(std::numeric_limits<decltype(C)>::max() > 0, "Hyper Parameter Error. (C > 0)");
     assert(dim > 0);
     assert(C > 0);
-
+    assert(diagonal >= 0 && diagonal <= 3);
   }
 
   virtual ~NHERD() { }
@@ -54,6 +62,38 @@ public :
     return confidence;
   }
 
+  double full_covariance(const double covariance, const double confidence, const double value) const {
+    const auto v = covariance * value;
+    return covariance - (v * v * (kC * kC * confidence + 2 * kC) / std::pow((1.0 + kC * confidence), 2));
+  }
+
+  double exact_covariance(const double covariance, const double confidence, const double value) const {
+    return covariance / std::pow(1.0 + kC * value * value * covariance, 2);
+  }
+
+  double project_covariance(const double covariance, const double confidence, const double value) const {
+    return 1.0 / ((1.0 / covariance) + (2 * kC + kC * kC * confidence) * value * value);
+  }
+
+  double drop_covariance(const double covariance, const double confidence, const double value) const {
+    return covariance - (std::pow(covariance * value, 2) * (kC * kC * confidence + 2 * kC) / std::pow(1.0 + kC * confidence, 2));
+  }
+
+  double compute_covariance(const double covariance, const double confidence, const double value) const {
+    switch(kDiagonal) {
+    case 0 :
+      return full_covariance(covariance, confidence, value);
+    case 1 :
+      return exact_covariance(covariance, confidence, value);
+    case 2 :
+      return project_covariance(covariance, confidence, value);
+    case 3 :
+      return drop_covariance(covariance, confidence, value);
+    default:
+      std::abort();
+    }
+  }
+
   bool update(const Eigen::VectorXd& feature, const int label) {
     const auto margin = compute_margin(feature);
 
@@ -64,16 +104,8 @@ public :
 
     utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const std::size_t index, const double value) {
-                         const auto v = _covariances[index] * value;
-                         _means[index] += alpha * label * v;
-                         // Full Covariance
-                         _covariances[index] -= v * v * (kC * kC * confidence + 2 * kC) / std::pow((1.0 + kC * confidence), 2);
-                         // Exact Covariance
-                         //_covariances[index] = _covariances[index] / std::pow(1.0 + kC * value * value * _covariances[index], 2);
-                         // Project Covariance
-                         //_covariances[index] = 1.0 / ((1.0 / _covariances[index]) + (2 * kC + kC * kC * confidence) * value * value);
-                         // Drop Covariance
-                         //_covariances[index] -= std::pow(_covariances[index] * value, 2) * (kC * kC * confidence + 2 * kC) / std::pow(1.0 + kC * confidence, 2);
+                         _means[index] += alpha * label * _covariances[index] * value;
+                         _covariances[index] = compute_covariance(_covariances[index], confidence, value);
                        });
     return true;
   }

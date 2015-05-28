@@ -40,8 +40,8 @@ int main(const int ac, const char* const * const av) {
     ("dim", value<int>()->default_value(0), "データの次元数")
     ("train", value<std::string>()->default_value(""), "学習データのファイルパス")
     ("test", value<std::string>()->default_value(""), "評価データのファイルパス")
-    ("c", value<double>()->default_value(0.5), "ハイパパラメータ(C)");
-  //("cov", value<std::string>()->default_value("full"), "Diagonal Covariance");
+    ("c", value<double>()->default_value(0.5), "ハイパパラメータ(C)")
+    ("diagonal", value<int>()->default_value(0), "Diagonal Covariance, 0:Full 1:Exact 2:Project 3:Drop");
 
   variables_map vm;
   store(parse_command_line(ac, av, description), vm);
@@ -52,12 +52,13 @@ int main(const int ac, const char* const * const av) {
   const auto dim = vm["dim"].as<int>();
   const auto train_path = vm["train"].as<std::string>();
   const auto test_path = vm["test"].as<std::string>();
-  const auto r = vm["c"].as<double>();
+  const auto c = vm["c"].as<double>();
+  const auto diagonal = vm["diagonal"].as<int>();
 
   std::string line;
   std::ifstream train_data(train_path);
 
-  NHERD nherd(dim, r);
+  NHERD nherd(dim, c, diagonal);
   std::cout << "training..." << std::endl;
   while(std::getline(train_data, line)) {
     std::pair< int, Eigen::VectorXd > data = parse(dim, line);
