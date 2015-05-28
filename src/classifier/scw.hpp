@@ -47,6 +47,8 @@ public :
 
   virtual ~SCW() { }
 
+private :
+
   double suffer_loss(const Eigen::VectorXd& f, const int label) const {
     const auto confidence = compute_confidence(f);
     return std::max(0.0, kPhi * std::sqrt(confidence) - label * _means.dot(f));
@@ -71,6 +73,8 @@ public :
                        });
     return confidence;
   }
+
+public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
     const auto v = compute_confidence(feature);

@@ -45,6 +45,8 @@ public :
 
   virtual ~NHERD() { }
 
+private :
+
   double suffer_loss(const double margin, const int label) const {
     return margin * label;
   }
@@ -93,6 +95,8 @@ public :
       std::abort();
     }
   }
+
+public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
     const auto margin = compute_margin(feature);

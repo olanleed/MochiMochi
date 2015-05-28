@@ -27,6 +27,10 @@ public :
     assert(dim > 0);
   }
 
+  virtual ~ADAM() { }
+
+private :
+
   double suffer_loss(const Eigen::VectorXd& x, const int y) const {
     return std::max(0.0, 1.0 - y * _w.dot(x));
   }
@@ -34,6 +38,8 @@ public :
   double calculate_margin(const Eigen::VectorXd& x) const {
     return _w.dot(x);
   }
+
+public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
     constexpr auto kAlpha = 0.001;
