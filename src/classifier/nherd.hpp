@@ -82,18 +82,24 @@ private :
   }
 
   double compute_covariance(const double covariance, const double confidence, const double value) const {
+    auto result = 0.0;
     switch(kDiagonal) {
     case 0 :
-      return full_covariance(covariance, confidence, value);
+      result = full_covariance(covariance, confidence, value);
+      break;
     case 1 :
-      return exact_covariance(covariance, confidence, value);
+      result = exact_covariance(covariance, confidence, value);
+      break;
     case 2 :
-      return project_covariance(covariance, confidence, value);
+      result = project_covariance(covariance, confidence, value);
+      break;
     case 3 :
-      return drop_covariance(covariance, confidence, value);
+      result = drop_covariance(covariance, confidence, value);
+      break;
     default:
       std::abort();
     }
+    return result;
   }
 
 public :
