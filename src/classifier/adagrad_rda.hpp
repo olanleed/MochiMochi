@@ -3,7 +3,7 @@
 
 #include <Eigen/Dense>
 #include <cmath>
-#include "utility.hpp"
+#include "functions.hpp"
 
 class ADAGRAD_RDA {
 private :
@@ -52,7 +52,7 @@ public :
     if (suffer_loss(feature, label) <= 0.0) { return false; }
 
     _timestep++;
-    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
+    functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
                          const auto gradiant = -label * value;
                          _g[index] += gradiant;

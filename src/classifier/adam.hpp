@@ -4,7 +4,7 @@
 #include <Eigen/Core>
 #include <cassert>
 #include <cinttypes>
-#include "utility.hpp"
+#include "functions.hpp"
 
 class ADAM {
 private :
@@ -54,7 +54,7 @@ public :
     const auto beta1_t = std::pow(kLambda, _timestep) * kBeta1;
 
     _timestep++;
-    utility::enumerate(gradiant.data(), gradiant.data() + gradiant.size(), 0,
+    functions::enumerate(gradiant.data(), gradiant.data() + gradiant.size(), 0,
                        [&](const std::size_t index, const double value) {
                          _m[index] = beta1_t * _m[index] + (1.0 - beta1_t) * value;
                          _v[index] = kBeta2 * _v[index] + (1.0 - kBeta2) * value * value;

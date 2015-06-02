@@ -10,7 +10,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
-#include "utility.hpp"
+#include "functions.hpp"
 
 class AROW {
 private :
@@ -49,7 +49,7 @@ private :
 
   double compute_confidence(const Eigen::VectorXd& feature) const {
     auto confidence = 0.0;
-    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
+    functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
                          confidence += _covariances[index] * value * value;
                        });
@@ -67,7 +67,7 @@ public :
     const auto beta = 1.0 / (confidence + kR);
     const auto alpha = std::max(0.0, 1.0 - label * margin) * beta;
 
-    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
+    functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
                          const auto v = _covariances[index] * value;
                          _means[index] += alpha * label * v;

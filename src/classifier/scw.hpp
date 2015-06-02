@@ -12,7 +12,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
-#include "utility.hpp"
+#include "functions.hpp"
 
 class SCW {
 private :
@@ -67,7 +67,7 @@ private :
 
   double compute_confidence(const Eigen::VectorXd& f) const {
     auto confidence = 0.0;
-    utility::enumerate(f.data(), f.data() + f.size(), 0,
+    functions::enumerate(f.data(), f.data() + f.size(), 0,
                        [&](const int index, const double value) {
                          confidence += _covariances[index] * value * value;
                        });
@@ -86,7 +86,7 @@ public :
 
     if (suffer_loss(feature, label) <= 0.0) { return false; }
 
-    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
+    functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
                          const auto v = _covariances[index] * value;
                          _means[index] += alpha * label * v;
