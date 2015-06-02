@@ -1,7 +1,7 @@
 #ifndef MOCHIMOCHI_SCW_HPP_
 #define MOCHIMOCHI_SCW_HPP_
 
-#include <Eigen/Core>
+#include <Eigen/Dense>
 #include <boost/math/special_functions/erf.hpp>
 #include <cmath>
 #include <cstdbool>

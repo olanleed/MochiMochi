@@ -1,7 +1,7 @@
 #ifndef MOCHIMOCHI_ADAM_HPP_
 #define MOCHIMOCHI_ADAM_HPP_
 
-#include <Eigen/Core>
+#include <Eigen/Dense>
 #include <cassert>
 #include <cinttypes>
 #include "functions.hpp"
