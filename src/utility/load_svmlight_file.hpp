@@ -4,6 +4,7 @@
 #include <Eigen/Dense>
 #include <fstream>
 #include <sstream>
+#include <map>
 
 namespace utility {
   inline std::pair<int, Eigen::VectorXd> read_ones(std::string line, const std::size_t dim) {
