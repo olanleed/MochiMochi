@@ -2,7 +2,6 @@
 #define MOCHIMOCHI_AROW_HPP_
 
 #include <Eigen/Dense>
-#include <cstdbool>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -10,7 +9,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
-#include "functions.hpp"
+#include "functions/enumerate.hpp"
 
 class AROW {
 private :

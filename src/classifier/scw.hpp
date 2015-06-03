@@ -12,7 +12,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
-#include "functions.hpp"
+#include "functions/enumerate.hpp"
 
 class SCW {
 private :
