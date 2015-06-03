@@ -83,7 +83,6 @@ private :
 public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
-    if (suffer_loss(feature, label) <= 0) { return false; }
     const auto loss = suffer_loss(feature, label);
     functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                          [&](const std::size_t index, const double value){
