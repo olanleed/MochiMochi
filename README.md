@@ -1,6 +1,9 @@
 # MochiMochi
 Online Machine Learning Library for C++11
 
+# USAGE
+Show examples.
+
 # Implemented Algolithms
 ### ADAM
 
@@ -11,7 +14,7 @@ http://arxiv.org/pdf/1412.6980v4.pdf
 ### Adagarad RDA
 Adaptive Subgradient Methods for Online Learning and Stochastic Optimization
 
-Adagarad = Adaptive Gradiant  
+Adagarad = Adaptive Gradiant
 RDA = Regularized Dual Averaging
 
 http://www.magicbroom.info/Papers/DuchiHaSi10.pdf
@@ -33,6 +36,15 @@ Nomal Herd
 Learning via Gaussian Herding
 
 http://webee.technion.ac.il/people/koby/publications/gaussian_mob_nips10.pdf
+
+### PA
+
+Passive Aggressive
+PA
+PA-1
+PA-2
+
+http://webee.technion.ac.il/people/koby/publications/crammer06a.pdf
 
 # License
 The MIT License (MIT)
