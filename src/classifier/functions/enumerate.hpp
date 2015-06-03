@@ -1,9 +1,9 @@
-#ifndef MOCHIMOCHI_UTILITY_HPP_
-#define MOCHIMOCHI_UTILITY_HPP_
+#ifndef MOCHIMOCHI_FUNCTIONS_HPP_
+#define MOCHIMOCHI_FUNCTIONS_HPP_
 
 #include <vector>
 
-namespace utility {
+namespace functions {
   template <typename IteratorT, typename FunctionT>
   FunctionT enumerate(IteratorT begin,
                       IteratorT end,
@@ -18,4 +18,4 @@ namespace utility {
   }
 };
 
-#endif //MOCHIMOCHI_UTILITY_HPP_
+#endif //MOCHIMOCHI_FUNCTIONS_HPP_

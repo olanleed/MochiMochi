@@ -11,7 +11,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <csignal>
-#include "utility.hpp"
+#include "functions/enumerate.hpp"
 
 class NHERD {
 private :
@@ -57,7 +57,7 @@ private :
 
   double compute_confidence(const Eigen::VectorXd& feature) const {
     auto confidence = 0.0;
-    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
+    functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const int index, const double value) {
                          confidence += _covariances[index] * value * value;
                        });
@@ -112,7 +112,7 @@ public :
     const auto confidence = compute_confidence(feature);
     const auto alpha = std::max(0.0, 1.0 - label * margin) / (confidence + 1 / kC) ;
 
-    utility::enumerate(feature.data(), feature.data() + feature.size(), 0,
+    functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const std::size_t index, const double value) {
                          _means[index] += alpha * label * _covariances[index] * value;
                          _covariances[index] = compute_covariance(_covariances[index], confidence, value);
