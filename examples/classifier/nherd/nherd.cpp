@@ -1,35 +1,7 @@
 #include "../../../src/classifier/nherd.hpp"
+#include "../../../src/utility/load_svmlight_file.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
-#include <map>
-#include <fstream>
-#include <sstream>
-
-std::pair<int, Eigen::VectorXd> parse(int size, const std::string& line) {
-  Eigen::VectorXd data = Eigen::VectorXd::Zero(size);
-  std::stringstream ss(line);
-  std::string str;
-  int label;
-
-  ss >> label;
-  while(ss >> str) {
-    int n = 0;
-    unsigned int i;
-    for (i = 0; i < size; ++i) {
-      if(str[i] == ':') {
-        ++i;
-        break;
-      }
-      n = 10 * n + (str.c_str()[i] - '0');
-    }
-    std::stringstream tt(str.substr(i));
-    double value;
-    tt >> value;
-    data(n - 1) = value;
-  }
-
-  return std::make_pair(label, data);
-}
 
 int main(const int ac, const char* const * const av) {
   using namespace boost::program_options;
@@ -61,7 +33,7 @@ int main(const int ac, const char* const * const av) {
   NHERD nherd(dim, c, diagonal);
   std::cout << "training..." << std::endl;
   while(std::getline(train_data, line)) {
-    std::pair< int, Eigen::VectorXd > data = parse(dim, line);
+    auto data = utility::read_ones(line, dim);
     nherd.update(data.second, data.first);
   }
 
@@ -70,7 +42,7 @@ int main(const int ac, const char* const * const av) {
   std::ifstream test_data(test_path);
   std::cout << "predicting..." << std::endl;
   while(std::getline(test_data, line)) {
-    std::pair< int, Eigen::VectorXd > data = parse(dim, line);
+    auto data = utility::read_ones(line, dim);
     int pred = nherd.predict(data.second);
     if(pred == data.first) {
       ++collect;
