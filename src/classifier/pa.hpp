@@ -1,5 +1,5 @@
-#ifndef MOCHIMOCHI_NHERD_HPP_
-#define MOCHIMOCHI_NHERD_HPP_
+#ifndef MOCHIMOCHI_PA_HPP_
+#define MOCHIMOCHI_PA_HPP_
 
 #include <Eigen/Dense>
 #include <boost/serialization/serialization.hpp>
@@ -135,4 +135,4 @@ private :
   }
 };
 
-#endif //MOCHIMOCHI_NHERD_HPP_
+#endif //MOCHIMOCHI_PA_HPP_
