@@ -40,9 +40,6 @@ http://webee.technion.ac.il/people/koby/publications/gaussian_mob_nips10.pdf
 ### PA
 
 Passive Aggressive
-PA
-PA-1
-PA-2
 
 http://webee.technion.ac.il/people/koby/publications/crammer06a.pdf
 
