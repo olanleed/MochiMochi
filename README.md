@@ -1,6 +1,9 @@
 # MochiMochi
 Online Machine Learning Library for C++11
 
+# Necessary Library
+Eigen 3.2.3
+
 # USAGE
 Show examples.
 
@@ -14,7 +17,7 @@ http://arxiv.org/pdf/1412.6980v4.pdf
 ### Adagarad RDA
 Adaptive Subgradient Methods for Online Learning and Stochastic Optimization
 
-Adagarad = Adaptive Gradiant
+Adagarad = Adaptive Gradiant  
 RDA = Regularized Dual Averaging
 
 http://www.magicbroom.info/Papers/DuchiHaSi10.pdf
