@@ -3,7 +3,7 @@
 
 #include <Eigen/Dense>
 #include <cassert>
-#include "functions/enumerate.hpp"
+#include "../functions/enumerate.hpp"
 
 class ADAM {
 private :
