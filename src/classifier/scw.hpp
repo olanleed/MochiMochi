@@ -52,10 +52,13 @@ private :
     return std::max(0.0, kPhi * std::sqrt(confidence) - label * _means.dot(f));
   }
 
+  //Proposition 1
   double compute_alpha(const double m, const double n, const double v, const double ganma) const {
-    const auto numerator = -(2.0 * m * n + kPhi * kPhi * m * v) + ganma;
-    const auto denominator = 2.0 * (n * n + n * v * kPhi * kPhi);
-    return std::max(0.0, numerator / denominator);
+    const auto psi = 1.0 + kPhi * kPhi / 2.0;
+    const auto zeta = 1.0 + kPhi * kPhi;
+    const auto tmp1 = -m * psi + std::sqrt(m * m * std::pow(kPhi, 4.0) / 4.0 + v * kPhi * kPhi * zeta);
+    const auto tmp2 = 1.0 / v * zeta * tmp1;
+    return std::min(kC, std::max(0.0, tmp2));
   }
 
   double compute_beta(const double alpha, const double v) const {
