@@ -62,7 +62,7 @@ private :
   }
 
   double compute_beta(const double alpha, const double v) const {
-    const auto u = std::pow(-alpha * v * kPhi + 4.0 * v , 2.0) / 4.0;
+    const auto u = std::pow(-alpha * v * kPhi + std::sqrt(alpha * alpha * v * v * kPhi * kPhi + 4.0 * v), 2.0) / 4.0;
     return alpha * kPhi / (std::sqrt(u) + v * alpha * kPhi);
   }
 
