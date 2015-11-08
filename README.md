@@ -1,4 +1,6 @@
 # MochiMochi
+ひと口で普通のもちもちだと見抜いたよ
+
 Online Machine Learning Library for C++11
 
 # Requirement
