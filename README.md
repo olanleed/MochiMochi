@@ -1,7 +1,8 @@
 # MochiMochi
 ひと口で普通のもちもちだと見抜いたよ
 
-Online Machine Learning Library for C++11
+# About this Library
+Online Machine Learning Library for C++
 
 # Requirement
 Eigen 3.2.3
