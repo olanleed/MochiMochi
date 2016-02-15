@@ -1,7 +1,7 @@
 # MochiMochi
 ひと口で普通のもちもちだと見抜いたよ
 
-# About this Library
+# What is MochiMochi?
 Online Machine Learning Library for C++
 
 # Requirement
