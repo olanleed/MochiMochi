@@ -2,12 +2,12 @@
 ひと口で普通のもちもちだと見抜いたよ
 
 # What is MochiMochi?
-Online Machine Learning Library for C++
+MochiMochi os Online Machine Learning Library for C++.
 
 # Requirement
 Eigen 3.2.3
 
-# USAGE
+# Usage
 Show examples.
 
 # Implemented Algolithms
