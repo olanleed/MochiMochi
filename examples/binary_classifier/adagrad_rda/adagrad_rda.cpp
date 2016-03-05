@@ -1,4 +1,4 @@
-#include "../../../src/classifier/scw.hpp"
+#include "../../../src/binary_classifier/adagrad_rda.hpp"
 #include "../../../src/utility/load_svmlight_file.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
@@ -12,8 +12,8 @@ int main(const int ac, const char* const * const av) {
     ("dim", value<int>()->default_value(0), "データの次元数")
     ("train", value<std::string>()->default_value(""), "学習データのファイルパス")
     ("test", value<std::string>()->default_value(""), "評価データのファイルパス")
-    ("c", value<double>()->default_value(0.5), "ハイパパラメータ(c)")
-    ("eta", value<double>()->default_value(0.5), "ハイパパラメータ(eta)");
+    ("eta", value<double>()->default_value(0.5), "ハイパパラメータ(eta)")
+    ("lambda", value<double>()->default_value(0.000001), "ハイパパラメータ(λ)");
 
   variables_map vm;
   store(parse_command_line(ac, av, description), vm);
@@ -24,17 +24,17 @@ int main(const int ac, const char* const * const av) {
   const auto dim = vm["dim"].as<int>();
   const auto train_path = vm["train"].as<std::string>();
   const auto test_path = vm["test"].as<std::string>();
-  const auto c = vm["c"].as<double>();
   const auto eta = vm["eta"].as<double>();
+  const auto lambda = vm["lambda"].as<double>();
 
   std::string line;
   std::ifstream train_data(train_path);
 
-  SCW scw(dim, c, eta);
+  ADAGRAD_RDA rda(dim, eta, lambda);
   std::cout << "training..." << std::endl;
   while(std::getline(train_data, line)) {
     auto data = utility::read_ones(line, dim);
-    scw.update(data.second, data.first);
+    rda.update(data.second, data.first);
   }
 
   int collect = 0;
@@ -43,7 +43,7 @@ int main(const int ac, const char* const * const av) {
   std::cout << "predicting..." << std::endl;
   while(std::getline(test_data, line)) {
     auto data = utility::read_ones(line, dim);
-    int pred = scw.predict(data.second);
+    int pred = rda.predict(data.second);
     if(pred == data.first) {
       ++collect;
     }
