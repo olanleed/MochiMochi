@@ -4,10 +4,11 @@ PROJECT(differential_evolution C CXX)
 
 FIND_PACKAGE(Threads REQUIRED)
 
-SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3 -std=c++11 -lboost_program_options")
+SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3 -std=c++11")
 SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 SET(CMAKE_BUILD_TYPE Release)
+SET(CMAKE_LINK_EXECUTABLE "-lboost_serialization -lboost_program_options")
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR} ../../../src/binary_classifier/")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR} ../../../src/classifier/binary/")
 ADD_EXECUTABLE(rda adagrad_rda.cpp)
-TARGET_LINK_LIBRARIES(rda ${CMAKE_THREAD_LIBS_INIT})
+TARGET_LINK_LIBRARIES(rda ${CMAKE_LINK_EXECUTABLE})

@@ -1,4 +1,4 @@
-#include "../../../src/binary_classifier/nherd.hpp"
+#include "../../../src/classifier/binary/nherd.hpp"
 #include "../../../src/utility/load_svmlight_file.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>

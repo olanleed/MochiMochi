@@ -1,4 +1,4 @@
-#include "../../../src/classifier/passive_aggressive.hpp"
+#include "../../../src/classifier/binary/passive_aggressive.hpp"
 #include "../../../src/utility/load_svmlight_file.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>

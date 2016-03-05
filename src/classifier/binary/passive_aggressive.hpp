@@ -9,7 +9,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
-#include "../functions/enumerate.hpp"
+#include "../../functions/enumerate.hpp"
 
 class PA {
 private :

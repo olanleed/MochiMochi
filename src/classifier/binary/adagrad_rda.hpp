@@ -2,7 +2,7 @@
 #define MOCHIMOCHI_ADAGRAD_RDA_HPP_
 
 #include <Eigen/Dense>
-#include "../functions/enumerate.hpp"
+#include "../../functions/enumerate.hpp"
 
 class ADAGRAD_RDA {
 private :

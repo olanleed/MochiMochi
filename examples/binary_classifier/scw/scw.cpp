@@ -1,4 +1,4 @@
-#include "../../../src/binary_classifier/scw.hpp"
+#include "../../../src/classifier/binary/scw.hpp"
 #include "../../../src/utility/load_svmlight_file.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>

@@ -1,4 +1,4 @@
-#include "../../../src/binary_classifier/adagrad_rda.hpp"
+#include "../../../src/classifier/binary/adagrad_rda.hpp"
 #include "../../../src/utility/load_svmlight_file.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
