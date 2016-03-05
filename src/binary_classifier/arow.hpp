@@ -49,9 +49,9 @@ private :
   double compute_confidence(const Eigen::VectorXd& feature) const {
     auto confidence = 0.0;
     functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
-                       [&](const int index, const double value) {
-                         confidence += _covariances[index] * value * value;
-                       });
+                         [&](const int index, const double value) {
+                           confidence += _covariances[index] * value * value;
+                         });
     return confidence;
   }
 
@@ -67,16 +67,20 @@ public :
     const auto alpha = std::max(0.0, 1.0 - label * margin) * beta;
 
     functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
-                       [&](const int index, const double value) {
-                         const auto v = _covariances[index] * value;
-                         _means[index] += alpha * label * v;
-                         _covariances[index] -= beta * v * v;
-                       });
+                         [&](const int index, const double value) {
+                           const auto v = _covariances[index] * value;
+                           _means[index] += alpha * label * v;
+                           _covariances[index] -= beta * v * v;
+                         });
     return true;
   }
 
   int predict(const Eigen::VectorXd& x) const {
     return compute_margin(x) > 0.0 ? 1 : -1;
+  }
+
+  double dot(const Eigen::VectorXd& x) const {
+    return compute_margin(x);
   }
 
   void save(const std::string& filename) {
