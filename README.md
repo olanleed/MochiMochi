@@ -5,7 +5,8 @@
 MochiMochi is an Online Machine Learning Library for C++.
 
 # Requirement
-Eigen 3.2.3
+Eigen 3.2.3  
+Boost 1.58
 
 # Usage
 Show examples.
@@ -20,7 +21,7 @@ http://arxiv.org/pdf/1412.6980v4.pdf
 ### Adagarad RDA
 Adaptive Subgradient Methods for Online Learning and Stochastic Optimization
 
-Adagarad = Adaptive Gradiant
+Adagarad = Adaptive Gradiant  
 RDA = Regularized Dual Averaging
 
 http://www.magicbroom.info/Papers/DuchiHaSi10.pdf
