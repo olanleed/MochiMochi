@@ -1,4 +1,4 @@
-#include "../../../src/multi_classifier/marow.hpp"
+#include "../../../src/classifier/multi/marow.hpp"
 #include "../../../src/utility/load_svmlight_file.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
@@ -44,7 +44,7 @@ int main(const int ac, const char* const * const av) {
   std::cout << "predicting..." << std::endl;
   while(std::getline(test_data, line)) {
     auto data = utility::read_ones(line, dim);
-    int pred = marow.predict(data.second);
+    auto pred = marow.predict(data.second);
     if(pred == data.first) {
       ++collect;
     }
