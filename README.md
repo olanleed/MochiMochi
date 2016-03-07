@@ -1,11 +1,12 @@
 # MochiMochi
+<<<<<<< 788c2dd8c7520eff6f5268d2e23743a7446a7ede
 ひと口で普通のもちもちだと見抜いたよ
 
 # What is MochiMochi?
-MochiMochi is an Online Machine Learning Library for C++.
+MochiMochi is an Online Machine Learning Library for C++14 or later.
 
 # Requirement
-Eigen 3.2.3  
+Eigen 3.2.3
 Boost 1.58
 
 # Usage
@@ -21,7 +22,7 @@ http://arxiv.org/pdf/1412.6980v4.pdf
 ### Adagarad RDA
 Adaptive Subgradient Methods for Online Learning and Stochastic Optimization
 
-Adagarad = Adaptive Gradiant  
+Adagarad = Adaptive Gradiant
 RDA = Regularized Dual Averaging
 
 http://www.magicbroom.info/Papers/DuchiHaSi10.pdf
@@ -53,6 +54,6 @@ http://webee.technion.ac.il/people/koby/publications/crammer06a.pdf
 # License
 The MIT License (MIT)
 
-Copyright (c) 2015 Tomohiro Mito  
-Released under the MIT license  
+Copyright (c) 2015 Tomohiro Mito
+Released under the MIT license
 http://opensource.org/licenses/mit-license.php
