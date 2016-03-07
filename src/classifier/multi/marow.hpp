@@ -16,7 +16,7 @@ private:
 public:
   MAROW(const std::size_t dim, const std::size_t n_class, const double r)
     : kClass(n_class) {
-    static_assert(std::numeric_limits<decltype(n_class)>::max() >= 2, "Class range Error. (n_class >= 2)");
+    static_assert(std::numeric_limits<decltype(n_class)>::max() > 2, "Class range Error. (n_class > 2)");
 
     for (const auto i : boost::irange<std::size_t>(1, kClass + 1)) {
       _arows.insert(std::pair<std::size_t, AROW>(i, AROW(dim, r)) );
