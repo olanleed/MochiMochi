@@ -36,7 +36,7 @@ public:
   std::size_t predict(const Eigen::VectorXd& feature) const {
     return std::max_element(_arows.begin(), _arows.end(),
                             [&](const auto& p1, const auto& p2) {
-                              return p1.second.dot(feature) < p2.second.dot(feature);
+                              return p1.second.get_means().dot(feature) < p2.second.get_means().dot(feature);
                             })->first;
   }
 

@@ -79,8 +79,8 @@ public :
     return compute_margin(x) > 0.0 ? 1 : -1;
   }
 
-  double dot(const Eigen::VectorXd& x) const {
-    return compute_margin(x);
+  Eigen::VectorXd get_means(void) const {
+    return _means;
   }
 
   void save(const std::string& filename) {
