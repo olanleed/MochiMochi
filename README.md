@@ -52,7 +52,3 @@ http://webee.technion.ac.il/people/koby/publications/crammer06a.pdf
 
 # License
 The MIT License (MIT)
-
-Copyright (c) 2015 Tomohiro Mito
-Released under the MIT license
-http://opensource.org/licenses/mit-license.php
