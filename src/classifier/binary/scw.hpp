@@ -101,6 +101,10 @@ public :
     return _means.dot(x) < 0.0 ? -1 : 1;
   }
 
+  Eigen::VectorXd get_means(void) const {
+    return _means;
+  }
+
   void save(const std::string& filename) {
     std::ofstream ofs(filename);
     assert(ofs);
