@@ -1,5 +1,4 @@
 # MochiMochi
-<<<<<<< 788c2dd8c7520eff6f5268d2e23743a7446a7ede
 ひと口で普通のもちもちだと見抜いたよ
 
 # What is MochiMochi?
