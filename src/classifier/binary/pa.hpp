@@ -97,6 +97,10 @@ public :
     return compute_margin(x) > 0.0 ? 1 : -1;
   }
 
+  Eigen::VectorXd get_weight(void) const {
+    return _weight;
+  }
+
   void save(const std::string& filename) {
     std::ofstream ofs(filename);
     assert(ofs);
