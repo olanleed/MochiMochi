@@ -5,7 +5,7 @@
 MochiMochi is an Online Machine Learning Library for C++14 or later.
 
 # Requirement
-Eigen 3.2.3
+Eigen 3.2.3  
 Boost 1.58
 
 # Usage
