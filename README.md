@@ -8,6 +8,14 @@ MochiMochi is an Online Machine Learning Library for C++14 or later.
 Eigen 3.2.3  
 Boost 1.58
 
+# Install
+This Library consisted of header files.
+Set the environment variable as below.
+
+```
+export CPATH=$CPATH:/path/to/MochiMochi
+```
+
 # Usage
 Show examples.
 
