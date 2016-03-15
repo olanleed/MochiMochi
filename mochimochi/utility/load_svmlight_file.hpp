@@ -7,10 +7,11 @@
 #include <map>
 
 namespace utility {
-  inline std::pair<int, Eigen::VectorXd> read_ones(std::string line, const std::size_t dim) {
+  template<typename T>
+  inline std::pair<T, Eigen::VectorXd> read_ones(std::string line, const std::size_t dim) {
     Eigen::VectorXd values = Eigen::VectorXd::Zero(dim);
     std::istringstream parsed_line(line);
-    int label;
+    T label;
     parsed_line >> label;
 
     std::string token;
