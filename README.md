@@ -9,7 +9,7 @@ Eigen 3.2.3
 Boost 1.58
 
 # Install
-Set the environment variable as below.
+You should be able to set the environment variable as below:
 
 ```
 export CPATH=$CPATH:/path/to/MochiMochi
