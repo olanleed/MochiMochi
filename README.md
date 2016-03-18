@@ -2,7 +2,7 @@
 ひと口で普通のもちもちだと見抜いたよ
 
 # What is MochiMochi?
-MochiMochi is an Online Machine Learning Library for C++14 or later.
+MochiMochi is an Online Machine Learning Library for C++14.
 
 # Requirement
 Eigen 3.2.3  
