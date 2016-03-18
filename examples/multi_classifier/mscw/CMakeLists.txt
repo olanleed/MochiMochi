@@ -9,6 +9,5 @@ SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 SET(CMAKE_BUILD_TYPE Release)
 SET(CMAKE_LINK_EXECUTABLE "-lboost_serialization -lboost_program_options")
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR} ../../../src/multi_classifier/")
 ADD_EXECUTABLE(mscw mscw.cpp)
 TARGET_LINK_LIBRARIES(mscw ${CMAKE_LINK_EXECUTABLE})
