@@ -1,5 +1,5 @@
-#include "../../../src/classifier/binary/arow.hpp"
-#include "../../../src/utility/load_svmlight_file.hpp"
+#include <mochimochi/binary_classifier.hpp>
+#include <mochimochi/utility.hpp>
 #include <boost/program_options.hpp>
 #include <iostream>
 
@@ -31,7 +31,7 @@ int main(const int ac, const char* const * const av) {
   AROW arow(dim, r);
   std::cout << "training..." << std::endl;
   while(std::getline(train_data, line)) {
-    auto data = utility::read_ones(line, dim);
+    auto data = utility::read_ones<int>(line, dim);
     arow.update(data.second, data.first);
   }
 
@@ -40,7 +40,7 @@ int main(const int ac, const char* const * const av) {
   std::ifstream test_data(test_path);
   std::cout << "predicting..." << std::endl;
   while(std::getline(test_data, line)) {
-    auto data = utility::read_ones(line, dim);
+    auto data = utility::read_ones<int>(line, dim);
     auto pred = arow.predict(data.second);
     if(pred == data.first) {
       ++collect;
