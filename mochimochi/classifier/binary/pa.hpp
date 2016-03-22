@@ -33,9 +33,6 @@ public :
 
     static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
     static_assert(std::numeric_limits<decltype(C)>::max() > 0, "Hyper Parameter Error. (C > 0)");
-    assert(dim > 0);
-    assert(C > 0);
-    assert(select >= 0 && select <= 2);
   }
 
   virtual ~PA() { }
