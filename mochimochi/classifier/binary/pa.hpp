@@ -44,7 +44,8 @@ public :
       break;
     case 1 :
       _compute_tau = [=](const auto value, const auto loss) {
-        return std::min(kC, pa(value, loss));
+        const auto pa = loss / std::pow(std::abs(value), 2);
+        return std::min(kC, pa);
       };
       break;
     case 2 :
@@ -75,7 +76,7 @@ public :
   bool update(const Eigen::VectorXd& feature, const int label) {
     const auto loss = suffer_loss(feature, label);
     functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
-                         [&](const std::size_t index, const double value){
+                         [&](const std::size_t index, const double value) {
                            const auto tau = _compute_tau(value, loss);
                            _weight[index] += tau * label * value;
                          });
