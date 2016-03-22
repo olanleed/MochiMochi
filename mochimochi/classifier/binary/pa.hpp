@@ -9,6 +9,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
+#include <functional>
 #include "../../functions/enumerate.hpp"
 
 class PA {
@@ -19,12 +20,9 @@ private :
 
 private :
   Eigen::VectorXd _weight;
+  std::function<double(double, double)> _compute_tau;
 
 public :
-  // int select : switching the PA algorithm
-  // 0 : PA
-  // 1 : PA-1
-  // 2 : PA-2
   PA(const std::size_t dim, const double C, const int select = 2)
     : kDim(dim),
       kC(C),
@@ -33,6 +31,31 @@ public :
 
     static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
     static_assert(std::numeric_limits<decltype(C)>::max() > 0, "Hyper Parameter Error. (C > 0)");
+
+    // int select : switching the PA algorithm
+    // 0 : PA
+    // 1 : PA-1
+    // 2 : PA-2
+    switch(kSelect) {
+    case 0 :
+      _compute_tau = [](const auto value, const auto loss) {
+        return loss / std::pow(std::abs(value), 2);
+      };
+      break;
+    case 1 :
+      _compute_tau = [=](const auto value, const auto loss) {
+        return std::min(kC, pa(value, loss));
+      };
+      break;
+    case 2 :
+      _compute_tau = [=](const auto value, const auto loss) {
+        return loss / (std::pow(std::abs(value), 2) + 1.0 / 2 * kC );
+      };
+      break;
+    default:
+      std::runtime_error("Error in the PA algorithm.");
+    }
+
   }
 
   virtual ~PA() { }
@@ -47,43 +70,13 @@ private :
     return _weight.dot(x);
   }
 
-  double pa(const double value, const double loss) const {
-    return loss / std::pow(std::abs(value), 2);
-  }
-
-  double pa_1(const double value, const double loss) const {
-    return std::min(kC, pa(value, loss));
-  }
-
-  double pa_2(const double value, const double loss) const {
-    return loss / (std::pow(std::abs(value), 2) + 1.0 / 2 * kC );
-  }
-
-  double compute_tau(const double value, const double loss) const {
-    auto result = 0.0;
-    switch(kSelect) {
-    case 0 :
-      result = pa(value, loss);
-      break;
-    case 1 :
-      result = pa_1(value, loss);
-      break;
-    case 2 :
-      result = pa_2(value, loss);
-      break;
-    default:
-      std::runtime_error("Error in select number.");
-    }
-    return result;
-  }
-
 public :
 
   bool update(const Eigen::VectorXd& feature, const int label) {
     const auto loss = suffer_loss(feature, label);
     functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                          [&](const std::size_t index, const double value){
-                           const auto tau = compute_tau(value, loss);
+                           const auto tau = _compute_tau(value, loss);
                            _weight[index] += tau * label * value;
                          });
 
