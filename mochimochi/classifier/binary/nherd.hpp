@@ -9,6 +9,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
+#include <functional>
 #include "../../functions/enumerate.hpp"
 
 class NHERD {
@@ -21,12 +22,10 @@ private :
   Eigen::VectorXd _covariances;
   Eigen::VectorXd _means;
 
+private :
+  std::function<double(double, double, double)> _compute_covariance;
+
 public :
-  // int diagonal : switching the diagonal covariance
-  // 0 : Full covariance
-  // 1 : Exact covariance
-  // 2 : Project covariance
-  // 3 : Drop covariance
   NHERD(const std::size_t dim, const double C, const int diagonal = 0)
     : kDim(dim),
       kC(C),
@@ -36,6 +35,39 @@ public :
 
     static_assert(std::numeric_limits<decltype(dim)>::max() > 0, "Dimension Error. (Dimension > 0)");
     static_assert(std::numeric_limits<decltype(C)>::max() > 0, "Hyper Parameter Error. (C > 0)");
+
+    // int diagonal : switching the diagonal covariance
+    // 0 : Full covariance
+    // 1 : Exact covariance
+    // 2 : Project covariance
+    // 3 : Drop covariance
+    switch(kDiagonal) {
+    case 0 :
+      _compute_covariance = [=](const auto covariance, const auto confidence, const auto value) {
+        const auto v = covariance * value;
+        return covariance - (v * v * (kC * kC * confidence + 2 * kC) / std::pow((1.0 + kC * confidence), 2));
+      };
+      break;
+    case 1 :
+      _compute_covariance = [=](const auto covariance, const auto confidence, const auto value) {
+        return covariance / std::pow(1.0 + kC * value * value * covariance, 2);
+      };
+      break;
+    case 2 :
+      _compute_covariance = [=](const auto covariance, const auto confidence, const auto value) {
+        return 1.0 / ((1.0 / covariance) + (2 * kC + kC * kC * confidence) * value * value);
+      };
+      break;
+    case 3 :
+      _compute_covariance = [=](const auto covariance, const auto confidence, const auto value) {
+        const auto v = (std::pow(covariance * value, 2) * (kC * kC * confidence + 2 * kC) / std::pow(1.0 + kC * confidence, 2));
+        return covariance - v;
+      };
+      break;
+    default:
+      std::runtime_error("Error in switching the diagonal covariance.");
+    }
+
   }
 
   virtual ~NHERD() { }
@@ -53,48 +85,10 @@ private :
   double compute_confidence(const Eigen::VectorXd& feature) const {
     auto confidence = 0.0;
     functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
-                       [&](const int index, const double value) {
-                         confidence += _covariances[index] * value * value;
-                       });
+                         [&](const int index, const double value) {
+                           confidence += _covariances[index] * value * value;
+                         });
     return confidence;
-  }
-
-  double full_covariance(const double covariance, const double confidence, const double value) const {
-    const auto v = covariance * value;
-    return covariance - (v * v * (kC * kC * confidence + 2 * kC) / std::pow((1.0 + kC * confidence), 2));
-  }
-
-  double exact_covariance(const double covariance, const double confidence, const double value) const {
-    return covariance / std::pow(1.0 + kC * value * value * covariance, 2);
-  }
-
-  double project_covariance(const double covariance, const double confidence, const double value) const {
-    return 1.0 / ((1.0 / covariance) + (2 * kC + kC * kC * confidence) * value * value);
-  }
-
-  double drop_covariance(const double covariance, const double confidence, const double value) const {
-    return covariance - (std::pow(covariance * value, 2) * (kC * kC * confidence + 2 * kC) / std::pow(1.0 + kC * confidence, 2));
-  }
-
-  double compute_covariance(const double covariance, const double confidence, const double value) const {
-    auto result = 0.0;
-    switch(kDiagonal) {
-    case 0 :
-      result = full_covariance(covariance, confidence, value);
-      break;
-    case 1 :
-      result = exact_covariance(covariance, confidence, value);
-      break;
-    case 2 :
-      result = project_covariance(covariance, confidence, value);
-      break;
-    case 3 :
-      result = drop_covariance(covariance, confidence, value);
-      break;
-    default:
-      std::abort();
-    }
-    return result;
   }
 
 public :
@@ -110,7 +104,7 @@ public :
     functions::enumerate(feature.data(), feature.data() + feature.size(), 0,
                        [&](const std::size_t index, const double value) {
                          _means[index] += alpha * label * _covariances[index] * value;
-                         _covariances[index] = compute_covariance(_covariances[index], confidence, value);
+                         _covariances[index] = _compute_covariance(_covariances[index], confidence, value);
                        });
     return true;
   }
