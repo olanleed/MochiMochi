@@ -9,7 +9,7 @@ Eigen 3.2.3
 Boost 1.58
 
 # Installation
-This Library consists of header files.  
+This Library is consisted of header files.  
 You should be able to set the environment variable as below:
 
 ```
